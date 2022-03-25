@@ -170,7 +170,7 @@ df = pd.DataFrame(data = x_input,columns=['UnitNumber', 'Cycle', 'OpSet1', 'OpSe
 df_train1 = df_train.append(df)
 x_input=np.concatenate(list(list(gen_train(df_train1[df_train1['UnitNumber']==unit], sequence_length, feats)) for unit in df_train1['UnitNumber'].unique()))
 from keras.models import load_model
-predictor_model = load_model('db-passion-for-data/ProjectMajor/my_model')
+predictor_model = load_model('my_model')
 with st.spinner(text = 'Predicting engine failure'):
   time.sleep(10)
   predictor_model.compile()
