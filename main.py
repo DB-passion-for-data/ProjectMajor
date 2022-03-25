@@ -14,7 +14,7 @@ st.sidebar.subheader("Sample Rates and Parameter Description")
 st.sidebar.write("The flights are full flight recordings sampled at 1 Hz and consist of 30 engine and flight condition parameters. Each flight contains 7 unique flight conditions for an approximately 90 min flight including ascent to cruise at 35K ft and descent back to sea level. The parameters for each flight are the flight conditions, health indicators, measurement temperatures and pressure measurements.")
 
 st.sidebar.write("Download the Paper related to Data Generation here")
-with open("files\Damage Propagation Modeling.pdf", "rb") as file:
+with open("app/projectmajor/files/Damage Propagation Modeling.pdf", "rb") as file:
      btn = st.sidebar.download_button(
              label="Damage Propagation Modeling",
              data=file,
@@ -80,7 +80,7 @@ def prepare_data(drop_cols = True):
     cols_to_drop = ['OpSet3', 'SensorMeasure1', 'SensorMeasure5', 'SensorMeasure6', 'SensorMeasure10', 'SensorMeasure14',
      'SensorMeasure16', 'SensorMeasure18', 'SensorMeasure19']
 
-    df_train = pd.read_csv('data/train_FD001.txt',delim_whitespace=True,names=input_file_column_names)
+    df_train = pd.read_csv('app/projectmajor/data/train_FD001.txt',delim_whitespace=True,names=input_file_column_names)
 
     rul = pd.DataFrame(df_train.groupby('UnitNumber')['Cycle'].max()).reset_index()
     rul.columns = ['UnitNumber', 'max']
@@ -88,13 +88,13 @@ def prepare_data(drop_cols = True):
     df_train['RUL'] = df_train['max'] - df_train['Cycle']
     df_train.drop('max', axis=1, inplace=True)
 
-    df_test = pd.read_csv('data/test_FD001.txt', delim_whitespace=True, names=input_file_column_names)
+    df_test = pd.read_csv('app/projectmajor/data/test_FD001.txt', delim_whitespace=True, names=input_file_column_names)
     
     if(drop_cols == True):
         df_train = df_train.drop(cols_to_drop, axis = 1)
         df_test = df_test.drop(cols_to_drop, axis = 1)
 
-    y_true = pd.read_csv('data/RUL_FD001.txt', delim_whitespace=True,names=["RUL"])
+    y_true = pd.read_csv('app/projectmajor/data/RUL_FD001.txt', delim_whitespace=True,names=["RUL"])
     y_true["UnitNumber"] = y_true.index
     
     return df_train, df_test, y_true
@@ -170,7 +170,7 @@ df = pd.DataFrame(data = x_input,columns=['UnitNumber', 'Cycle', 'OpSet1', 'OpSe
 df_train1 = df_train.append(df)
 x_input=np.concatenate(list(list(gen_train(df_train1[df_train1['UnitNumber']==unit], sequence_length, feats)) for unit in df_train1['UnitNumber'].unique()))
 from keras.models import load_model
-predictor_model = load_model('my_model')
+predictor_model = load_model('app/projectmajor/my_model')
 with st.spinner(text = 'Predicting engine failure'):
   time.sleep(10)
   predictor_model.compile()
