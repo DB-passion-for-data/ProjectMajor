@@ -14,13 +14,13 @@ st.sidebar.subheader("Sample Rates and Parameter Description")
 st.sidebar.write("The flights are full flight recordings sampled at 1 Hz and consist of 30 engine and flight condition parameters. Each flight contains 7 unique flight conditions for an approximately 90 min flight including ascent to cruise at 35K ft and descent back to sea level. The parameters for each flight are the flight conditions, health indicators, measurement temperatures and pressure measurements.")
 
 st.sidebar.write("Download the Paper related to Data Generation here")
-"""with open("https://github.com/DB-passion-for-data/ProjectMajor/blob/main/files/Damage%20Propagation%20Modeling.pdf", "rb") as file:
+with open("files/Damage Propagation Modeling.pdf", "rb") as file:
      btn = st.sidebar.download_button(
              label="Damage Propagation Modeling",
              data=file,
              file_name="Damage Propagation Modeling.pdf",
              mime="text/pdf"
-           )"""
+           )
 #st.sidebar.download_button(label = "Damage Propagation Modeling",data = files\Damage Propagation Modeling.pdf)
 st.write("""Predictive Maintenance techniques are used to determine the condition of
          an equipment to plan the maintenance/failure ahead of its time. This is
@@ -80,7 +80,7 @@ def prepare_data(drop_cols = True):
     cols_to_drop = ['OpSet3', 'SensorMeasure1', 'SensorMeasure5', 'SensorMeasure6', 'SensorMeasure10', 'SensorMeasure14',
      'SensorMeasure16', 'SensorMeasure18', 'SensorMeasure19']
 
-    df_train = pd.read_csv('db-passion-for-data/ProjectMajor/data/train_FD001.txt',delim_whitespace=True,names=input_file_column_names)
+    df_train = pd.read_csv('data/train_FD001.txt',delim_whitespace=True,names=input_file_column_names)
 
     rul = pd.DataFrame(df_train.groupby('UnitNumber')['Cycle'].max()).reset_index()
     rul.columns = ['UnitNumber', 'max']
@@ -88,13 +88,13 @@ def prepare_data(drop_cols = True):
     df_train['RUL'] = df_train['max'] - df_train['Cycle']
     df_train.drop('max', axis=1, inplace=True)
 
-    df_test = pd.read_csv('db-passion-for-data/ProjectMajor/data/test_FD001.txt', delim_whitespace=True, names=input_file_column_names)
+    df_test = pd.read_csv('data/test_FD001.txt', delim_whitespace=True, names=input_file_column_names)
     
     if(drop_cols == True):
         df_train = df_train.drop(cols_to_drop, axis = 1)
         df_test = df_test.drop(cols_to_drop, axis = 1)
 
-    y_true = pd.read_csv('db-passion-for-data/ProjectMajor/data/RUL_FD001.txt', delim_whitespace=True,names=["RUL"])
+    y_true = pd.read_csv('data/RUL_FD001.txt', delim_whitespace=True,names=["RUL"])
     y_true["UnitNumber"] = y_true.index
     
     return df_train, df_test, y_true
