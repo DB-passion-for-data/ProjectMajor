@@ -14,13 +14,13 @@ st.sidebar.subheader("Sample Rates and Parameter Description")
 st.sidebar.write("The flights are full flight recordings sampled at 1 Hz and consist of 30 engine and flight condition parameters. Each flight contains 7 unique flight conditions for an approximately 90 min flight including ascent to cruise at 35K ft and descent back to sea level. The parameters for each flight are the flight conditions, health indicators, measurement temperatures and pressure measurements.")
 
 st.sidebar.write("Download the Paper related to Data Generation here")
-with open("https://github.com/DB-passion-for-data/ProjectMajor/blob/main/files/Damage%20Propagation%20Modeling.pdf", "rb") as file:
+"""with open("https://github.com/DB-passion-for-data/ProjectMajor/blob/main/files/Damage%20Propagation%20Modeling.pdf", "rb") as file:
      btn = st.sidebar.download_button(
              label="Damage Propagation Modeling",
              data=file,
              file_name="Damage Propagation Modeling.pdf",
              mime="text/pdf"
-           )
+           )"""
 #st.sidebar.download_button(label = "Damage Propagation Modeling",data = files\Damage Propagation Modeling.pdf)
 st.write("""Predictive Maintenance techniques are used to determine the condition of
          an equipment to plan the maintenance/failure ahead of its time. This is
