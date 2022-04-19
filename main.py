@@ -178,5 +178,5 @@ with st.spinner(text = 'Predicting engine remaining useful life....'):
   a = prediction[-1].numpy()
   days = str(round(a[0]))
   no_days = days + " days"
-  st.subtitle("Engine's remaining useful life is about ")
-  st.title(no_days)
+  st.subheader("Engine's remaining useful life is about ")
+  st.header(no_days)
