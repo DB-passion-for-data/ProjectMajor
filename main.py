@@ -168,15 +168,16 @@ df_test1 = df_test.append(df)
 x_input=np.concatenate(list(list(gen_test(df_test1[df_test1['UnitNumber']==unit], sequence_length, feats,mask_value)) for unit in df_test1['UnitNumber'].unique()))
 from keras.models import load_model
 predictor_model = load_model('my_model')
-with st.spinner(text = 'Predicting engine remaining useful life....'):
-  time.sleep(10)
-  predictor_model.compile()
+if st.button('Predict now'):
+     with st.spinner(text = 'Predicting engine remaining useful life....'):
+          time.sleep(4)
+          predictor_model.compile()
   #prediction = (predictor_model.predict((np.array(x_input).reshape(1,50,15))) > 0.5).astype("int32")
   
   #a = (predictor_model.predict(x_input)>0.5)
-  prediction = predictor_model(x_input)
-  a = prediction[-1].numpy()
-  days = str(round(a[0]))
-  no_days = days + " days"
-  st.subheader("Engine's remaining useful life is about ")
-  st.header(no_days)
+          prediction = predictor_model(x_input)
+          a = prediction[-1].numpy()
+          days = str(round(a[0]))
+          no_days = days + " days"
+          st.write("Engine's remaining useful life is about ",st.subheader(no_days))
+          
