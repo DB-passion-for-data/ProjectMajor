@@ -52,7 +52,7 @@ sm10= st.number_input("Sensor Measure 10")
 sm11= st.number_input("Sensor Measure 11")
 sm12= st.number_input("Sensor Measure 12")
 sm13= st.number_input("Sensor Measure 13") 
-rul = st.number_input("Enter the Remaining Useful Life")
+#rul = st.number_input("Enter the Remaining Useful Life")
 
 #making the code
 import pandas as pd
@@ -107,9 +107,6 @@ min_max_scaler = MinMaxScaler(feature_range=(-1,1))
 df_train[feats] = min_max_scaler.fit_transform(df_train[feats])
 df_test[feats] = min_max_scaler.transform(df_test[feats])
 
-df_train['failure'] = [1 if i < 50 else 0 for i in df_train.RUL]
-y_true['failure'] = [1 if i < 50 else 0 for i in y_true.RUL]
-
 def gen_train(id_df, seq_length, seq_cols):
     """
         function to prepare train data into (samples, time steps, features)
@@ -161,25 +158,23 @@ mask_value = 0
 
 #x_train=np.concatenate(list(list(gen_train(df_train[df_train['UnitNumber']==unit], sequence_length, feats)) for unit in df_train['UnitNumber'].unique()))
 
-x_input = np.array([unit_number,cycle,op1,op2,sm1,sm2,sm3,sm4,sm5,sm6,sm7,sm8,sm9,sm10,sm11,sm12,sm13,rul]).reshape(1,18)
+x_input = np.array([unit_number,cycle,op1,op2,sm1,sm2,sm3,sm4,sm5,sm6,sm7,sm8,sm9,sm10,sm11,sm12,sm13]).reshape(1,17)
 df = pd.DataFrame(data = x_input,columns=['UnitNumber', 'Cycle', 'OpSet1', 'OpSet2', 'SensorMeasure2',
        'SensorMeasure3', 'SensorMeasure4', 'SensorMeasure7', 'SensorMeasure8',
        'SensorMeasure9', 'SensorMeasure11', 'SensorMeasure12',
        'SensorMeasure13', 'SensorMeasure15', 'SensorMeasure17',
-       'SensorMeasure20', 'SensorMeasure21', 'RUL'])
-df_train1 = df_train.append(df)
-x_input=np.concatenate(list(list(gen_train(df_train1[df_train1['UnitNumber']==unit], sequence_length, feats)) for unit in df_train1['UnitNumber'].unique()))
+       'SensorMeasure20', 'SensorMeasure21'])
+df_test1 = df_test.append(df)
+x_input=np.concatenate(list(list(gen_train(df_test1[df_test1['UnitNumber']==unit], sequence_length, feats)) for unit in df_test1['UnitNumber'].unique()))
 from keras.models import load_model
 predictor_model = load_model('my_model')
-with st.spinner(text = 'Predicting engine failure'):
+with st.spinner(text = 'Predicting engine remaining useful life....'):
   time.sleep(10)
   predictor_model.compile()
   #prediction = (predictor_model.predict((np.array(x_input).reshape(1,50,15))) > 0.5).astype("int32")
   
-  a = (predictor_model.predict(x_input)>0.5)
-  st.write(a[-1][0])
-  if a[-1][0]==True:
-      st.success("Engine is all good to work under the provided conditions.")
-  else:
-        st.warning("Engine may fail under these conditions!!!")
+  #a = (predictor_model.predict(x_input)>0.5)
+  prediction = predictor_model(x_test_input)
+  a = prediction[-1].numpy()
+  st.info("Engine's remaining useful life is about ",round(a[0])," days") 
   
