@@ -176,5 +176,7 @@ with st.spinner(text = 'Predicting engine remaining useful life....'):
   #a = (predictor_model.predict(x_input)>0.5)
   prediction = predictor_model(x_input)
   a = prediction[-1].numpy()
-  st.info("Engine's remaining useful life is about ",round(a[0])," days") 
+  days = str(round(a[0]))
+  no_days = days + " days"
+  st.info("Engine's remaining useful life is about ",no_days) 
   
