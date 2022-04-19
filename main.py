@@ -179,5 +179,5 @@ if st.button('Predict now'):
           a = prediction[-1].numpy()
           days = str(round(a[0]))
           no_days = days + " days"
-          st.subheader(no_days))
+          st.subheader(no_days)
           st.write("Engine's remaining useful life is about " ,no_days)
