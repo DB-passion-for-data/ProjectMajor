@@ -165,7 +165,7 @@ df = pd.DataFrame(data = x_input,columns=['UnitNumber', 'Cycle', 'OpSet1', 'OpSe
        'SensorMeasure13', 'SensorMeasure15', 'SensorMeasure17',
        'SensorMeasure20', 'SensorMeasure21'])
 df_test1 = df_test.append(df)
-x_input=np.concatenate(list(list(gen_test(df_test1[df_test1['UnitNumber']==unit], sequence_length, feats)) for unit in df_test1['UnitNumber'].unique()))
+x_input=np.concatenate(list(list(gen_test(df_test1[df_test1['UnitNumber']==unit], sequence_length, feats,mask_value)) for unit in df_test1['UnitNumber'].unique()))
 from keras.models import load_model
 predictor_model = load_model('my_model')
 with st.spinner(text = 'Predicting engine remaining useful life....'):
@@ -174,7 +174,7 @@ with st.spinner(text = 'Predicting engine remaining useful life....'):
   #prediction = (predictor_model.predict((np.array(x_input).reshape(1,50,15))) > 0.5).astype("int32")
   
   #a = (predictor_model.predict(x_input)>0.5)
-  prediction = predictor_model(x_test_input)
+  prediction = predictor_model(x_input)
   a = prediction[-1].numpy()
   st.info("Engine's remaining useful life is about ",round(a[0])," days") 
   
